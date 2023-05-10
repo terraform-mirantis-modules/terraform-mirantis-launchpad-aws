@@ -1,0 +1,10 @@
+.DS_Store
+
+cluster.yaml
+launchpad.yaml
+ssh_keys/
+.terraform/
+*terraform.tfstate*
+*.tfvars
+*.tfvars.json
+.terraform.lock.hcl
