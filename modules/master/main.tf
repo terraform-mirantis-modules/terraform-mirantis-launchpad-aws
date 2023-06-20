@@ -23,6 +23,9 @@ resource "aws_security_group" "master" {
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
+  tags = {
+    "kubernetes.io/cluster/${var.cluster_name}" = "owned"
+  }
 }
 
 locals {
@@ -34,8 +37,8 @@ resource "aws_instance" "mke_master" {
   count = var.master_count
 
   tags = tomap({
-    "Name" = "${var.cluster_name}-master-${count.index + 1}",
-    "Role" = "manager",
+    "Name"                 = "${var.cluster_name}-master-${count.index + 1}",
+    "Role"                 = "manager",
     (var.kube_cluster_tag) = "shared"
   })
 
