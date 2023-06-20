@@ -2,6 +2,9 @@ resource "aws_security_group" "worker" {
   name        = "${var.cluster_name}-workers"
   description = "mke cluster workers"
   vpc_id      = var.vpc_id
+  tags = {
+    "kubernetes.io/cluster/${var.cluster_name}" = "owned"
+  }
 }
 
 locals {
@@ -13,8 +16,8 @@ resource "aws_instance" "mke_worker" {
   count = var.worker_count
 
   tags = tomap({
-    "Name" = "${var.cluster_name}-worker-${count.index + 1}",
-    "Role" = "worker",
+    "Name"                 = "${var.cluster_name}-worker-${count.index + 1}",
+    "Role"                 = "worker",
     (var.kube_cluster_tag) = "shared"
   })
 
