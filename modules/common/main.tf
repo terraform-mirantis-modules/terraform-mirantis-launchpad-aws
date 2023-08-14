@@ -41,7 +41,7 @@ data "aws_ami" "windows_2019" {
 
   filter {
     name   = "name"
-    values = ["Windows_Server-2019-English-Core-ContainersLatest-*"]
+    values = ["Windows_Server-2019-English-Core-Base-*"]
   }
 
   filter {
