@@ -1,5 +1,6 @@
 output "mke_cluster" {
-  value = yamlencode(local.launchpad_1_4)
+  value       = yamlencode(local.launchpad_1_4)
+  description = "The launchpad template in yaml format"
 }
 
 output "hosts" {

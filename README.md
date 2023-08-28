@@ -6,9 +6,12 @@ Launchpad can also provide full cluster lifecycle management. Multi-manager, hig
 
 ## Documentation
 
-Launchpad documentation can be browsed on the [Mirantis Documentation site](https://docs.mirantis.com/mke/3.4/launchpad.html).
+Launchpad documentation can be browsed on the [Mirantis Documentation site](https://docs.mirantis.com/mke/3.5/launchpad.html).
 
-## Example
+## Auth
+In order to authenticate you'll need to have AWS credentials. You can either paste the AWS credentials in the terminal windows or you can point the Mirantis Launchpad AWS module to a credentials file. The creds file path variables is called `aws_shared_credentials_file`
+
+## Examples
 
 Launchpad reads a YAML configuration file which lists cluster hosts with their connection addresses and product settings. It will then connect to each of the hosts, make the necessary preparations and finally install, upgrade or uninstall the cluster to match the desired state.
 
@@ -76,6 +79,118 @@ INFO MKE cluster admin UI: https://test-mke-cluster.example.com
 INFO You can also download the admin client bundle with the following command: launchpad client-config
 ```
 
+### Mirantis Launchpad Provider + Mirantis AWS Module example
+```
+module "provision" {
+  source = "terraform-mirantis-modules/launchpad-aws/mirantis"
+
+  aws_region = var.aws_region
+
+  cluster_name = var.cluster_name
+
+  master_count       = var.master_count
+  master_type        = var.master_type
+  master_volume_size = var.master_volume_size
+
+  worker_count       = var.worker_count
+  worker_type        = var.worker_type
+  worker_volume_size = var.worker_volume_size
+
+  msr_count            = 1
+  windows_worker_count = 0
+}
+
+// launchpad install from provisioned cluster
+resource "launchpad_config" "cluster" {
+  # Tell the launchpad provider to not bother uninstalling
+  # the container products on terraform destroy operations.
+  skip_destroy = true
+
+  metadata {
+    name = var.cluster_name
+  }
+  spec {
+    cluster {
+      prune = true
+    }
+
+    dynamic "host" {
+      # dynamic host blocks built from the hosts map
+      # provided by the module as an output:
+      
+      for_each = module.provision.hosts
+
+      content {
+        role = host.value.role
+
+        # If the host map has ssh settings
+        dynamic "ssh" {
+          for_each = can(host.value.ssh) ? [1] : [] # one loop if there er a value
+
+          content {
+            address  = host.value.ssh.address
+            user     = host.value.ssh.user
+            key_path = host.value.ssh.keyPath
+            port     = 22
+          }
+        }
+
+        # If the host map has ssh settings
+        dynamic "winrm" {
+          for_each = can(host.value.winRM) ? [1] : [] # one loop if there er a value
+
+          content {
+            address   = host.value.winRM.address
+            user      = host.value.winRM.user
+            password  = host.value.winRM.password
+            use_https = host.value.winRM.useHTTPS
+            insecure  = host.value.winRM.insecure
+            port      = 5985
+          }
+        }
+
+      }
+    }
+
+    # MCR configuration
+    mcr {
+      channel             = "stable"
+      install_url_linux   = "https://get.mirantis.com/"
+      install_url_windows = "https://get.mirantis.com/install.ps1"
+      repo_url            = "https://repos.mirantis.com"
+      version             = var.mcr_version
+    } // mcr
+
+    # MKE configuration
+    mke {
+      admin_password = var.mke_password
+      admin_username = "admin"
+      image_repo     = "docker.io/mirantis"
+      version        = var.mke_version
+      install_flags  = ["--san=${module.provision.mke_lb}", "--default-node-orchestrator=kubernetes", "--nodeport-range=32768-35535"]
+      upgrade_flags  = ["--force-recent-backup", "--force-minimums"]
+    } // mke
+
+    # MSR configuration
+
+    msr {
+      image_repo    = "docker.io/mirantis"
+      version       = var.msr_version
+      replica_ids   = "sequential"
+      install_flags = ["--ucp-insecure-tls"]
+    } // msr
+
+  } // spec
+}
+
+provider "mke" {
+  endpoint          = "https://testtest-master-lb-testtest.elb.us-east-1.amazonaws.com"
+  username          = "admin"
+  password          = "miradmin"
+  unsafe_ssl_client = true
+}
+```
+
 ## Support, Reporting Issues & Feedback
 
-Please use Github [issues](https://github.com/Mirantis/launchpad/issues) to report any issues, provide feedback, or request support.
+Please use Github [issues](https://github.com/terraform-mirantis-modules/terraform-mirantis-launchpad-aws) to report any issues, provide feedback, or request support.

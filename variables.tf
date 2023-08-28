@@ -9,74 +9,93 @@ variable "cluster_name" {
 }
 
 variable "aws_region" {
-  default = "us-east-2"
+  default     = "us-east-2"
+  description = "The AWS region"
 }
 
 variable "aws_shared_credentials_file" {
-  default = "~/.aws/credentials"
+  default     = "~/.aws/credentials"
+  description = "The path to the AWS credentials file."
 }
 
 variable "vpc_cidr" {
-  default = "172.31.0.0/16"
+  default     = "172.31.0.0/16"
+  description = "The CIDR subnet range in the VPC"
 }
 
 variable "admin_password" {
-  default = "mirantisadmin"
+  default     = "mirantisadmin"
+  description = "The admini password for the apps"
 }
 
 variable "admin_username" {
-  default = "admin"
+  default     = "admin"
+  description = "The admin username"
 }
 
 variable "master_count" {
-  default = 1
+  default     = 1
+  description = "Number of Master instances/machines"
 }
 
 variable "worker_count" {
-  default = 3
+  default     = 3
+  description = "Number of Worker instances/machines"
 }
 
 variable "windows_worker_count" {
-  default = 0
+  default     = 0
+  description = "Number of Windows worker instances/machines"
 }
 
 variable "msr_count" {
-  default = 0
+  default     = 0
+  description = "The number of MSR instances"
 }
 
 variable "master_type" {
-  default = "m5.large"
+  default     = "m5.large"
+  description = "The machine size for the master instances"
 }
 
 variable "worker_type" {
-  default = "m5.large"
+  default     = "m5.large"
+  description = "The machine size for the worker instances"
 }
 
 variable "msr_type" {
-  default = "m5.large"
+  default     = "m5.large"
+  description = "The machine size for the MSR instances"
+
 }
 variable "master_volume_size" {
-  default = 100
+  default     = 100
+  desrciption = "The volume size for the master instances"
 }
 
 variable "worker_volume_size" {
-  default = 100
+  default     = 100
+  desrciption = "The volume size for the worker instances"
 }
 
 variable "msr_volume_size" {
-  default = 100
+  default     = 100
+  desrciption = "The volume size for the MSR instances"
 }
 
 variable "windows_administrator_password" {
-  default = "w!ndozePassw0rd"
+  default     = "w!ndozePassw0rd"
+  desrciption = "The password for the windows instances"
 }
 
 variable "mke_version" {
-  default = "3.6.3"
+  default     = "3.6.3"
+  desrciption = "The password for the windows instances"
 }
 
 variable "msr_version" {
-  default = "2.9.11"
+  default     = "2.9.11"
+  desrciption = "The password for the MSR instances"
 }
 
 variable "msr_install_flags" {
