@@ -82,6 +82,7 @@ INFO You can also download the admin client bundle with the following command: l
 ### Mirantis Launchpad Provider + Mirantis AWS Module example
 ```
 module "provision" {
+  # You don't have to set mcr_version, mke_version, msr_version
   source = "terraform-mirantis-modules/launchpad-aws/mirantis"
 
   aws_region = var.aws_region
@@ -158,24 +159,24 @@ resource "launchpad_config" "cluster" {
       install_url_linux   = "https://get.mirantis.com/"
       install_url_windows = "https://get.mirantis.com/install.ps1"
       repo_url            = "https://repos.mirantis.com"
-      version             = var.mcr_version
+      version             = "23.0.3"
     } // mcr
 
     # MKE configuration
     mke {
-      admin_password = var.mke_password
+      admin_password = "myp@ssword"
       admin_username = "admin"
       image_repo     = "docker.io/mirantis"
-      version        = var.mke_version
+      version        = "3.5.0"
       install_flags  = ["--san=${module.provision.mke_lb}", "--default-node-orchestrator=kubernetes", "--nodeport-range=32768-35535"]
       upgrade_flags  = ["--force-recent-backup", "--force-minimums"]
     } // mke
 
     # MSR configuration
-
+    # This will produce an error if you don't have designated MSR nodes
     msr {
       image_repo    = "docker.io/mirantis"
-      version       = var.msr_version
+      version       = "2.9.0"
       replica_ids   = "sequential"
       install_flags = ["--ucp-insecure-tls"]
     } // msr
@@ -184,9 +185,9 @@ resource "launchpad_config" "cluster" {
 }
 
 provider "mke" {
-  endpoint          = "https://testtest-master-lb-testtest.elb.us-east-1.amazonaws.com"
+  endpoint          = "https://${module.provision.mke_lb}"
   username          = "admin"
-  password          = "miradmin"
+  password          = "myp@ssword"
   unsafe_ssl_client = true
 }
 ```
