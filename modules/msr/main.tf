@@ -21,8 +21,8 @@ resource "aws_instance" "msr" {
   count = var.msr_count
 
   tags = tomap({
-    "Name" = "${var.cluster_name}-msr-${count.index + 1}",
-    "Role" = "msr",
+    "Name"                 = "${var.cluster_name}-msr-${count.index + 1}",
+    "Role"                 = "msr",
     (var.kube_cluster_tag) = "shared"
   })
 

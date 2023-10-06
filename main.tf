@@ -43,6 +43,7 @@ module "masters" {
 }
 
 module "msrs" {
+  count                 = var.msr_count >= 1 ? 1 : 0
   source                = "./modules/msr"
   msr_count             = var.msr_count
   vpc_id                = module.vpc.id
@@ -99,8 +100,8 @@ locals {
       privateInterface = "ens5"
     }
   ]
-  msrs = [
-    for host in module.msrs.machines : {
+  msrs = var.msr_count >= 1 ? [
+    for host in module.msrs[0].machines : {
       ssh = {
         address = host.public_ip
         user    = "ubuntu"
@@ -109,7 +110,7 @@ locals {
       role             = host.tags["Role"]
       privateInterface = "ens5"
     }
-  ]
+  ] : []
   workers = [
     for host in module.workers.machines : {
       ssh = {

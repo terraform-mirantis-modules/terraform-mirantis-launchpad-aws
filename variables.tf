@@ -70,32 +70,32 @@ variable "msr_type" {
 }
 variable "master_volume_size" {
   default     = 100
-  desrciption = "The volume size for the master instances"
+  description = "The volume size for the master instances"
 }
 
 variable "worker_volume_size" {
   default     = 100
-  desrciption = "The volume size for the worker instances"
+  description = "The volume size for the worker instances"
 }
 
 variable "msr_volume_size" {
   default     = 100
-  desrciption = "The volume size for the MSR instances"
+  description = "The volume size for the MSR instances"
 }
 
 variable "windows_administrator_password" {
   default     = "w!ndozePassw0rd"
-  desrciption = "The password for the windows instances"
+  description = "The password for the windows instances"
 }
 
 variable "mke_version" {
   default     = "3.6.3"
-  desrciption = "The password for the windows instances"
+  description = "The password for the windows instances"
 }
 
 variable "msr_version" {
   default     = "2.9.11"
-  desrciption = "The password for the MSR instances"
+  description = "The password for the MSR instances"
 }
 
 variable "msr_install_flags" {
