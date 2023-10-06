@@ -14,6 +14,6 @@ output "mke_lb" {
 }
 
 output "msr_lb" {
-  value       = module.msrs.lb_dns_name
+  value       = var.msr_count >= 1 ? module.msrs[0].lb_dns_name : null
   description = "LB path for the MSR ingress"
 }
