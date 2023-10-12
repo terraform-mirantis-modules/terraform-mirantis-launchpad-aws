@@ -124,7 +124,7 @@ locals {
   ]
   windows_workers = [
     for host in module.windows_workers.machines : {
-      winRM = {
+      winrm = {
         address  = host.public_ip
         user     = "Administrator"
         password = var.windows_administrator_password
