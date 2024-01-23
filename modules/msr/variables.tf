@@ -31,3 +31,8 @@ variable "msr_type" {
 variable "msr_volume_size" {
   default = 100
 }
+
+variable "additional_sg_ids" {
+  description = "Additional security group IDs to attach to the msr nodes"
+  type        = list(string)
+}
