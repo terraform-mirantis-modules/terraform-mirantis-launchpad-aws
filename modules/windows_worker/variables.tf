@@ -27,11 +27,4 @@ variable "worker_volume_size" {
 }
 
 variable "windows_administrator_password" {
-  description = "Windows administrator password"
-}
-
-variable "additional_sg_ids" {
-  description = "Additional security group IDs to attach to the windows worker nodes"
-  type        = list(string)
-  default     = []
 }

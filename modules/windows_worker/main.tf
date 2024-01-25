@@ -19,15 +19,15 @@ resource "aws_instance" "mke_worker" {
   count = var.worker_count
 
   tags = tomap({
-    "Name"                 = "${var.cluster_name}-win-worker-${count.index + 1}",
-    "Role"                 = "worker",
+    "Name" = "${var.cluster_name}-win-worker-${count.index + 1}",
+    "Role" = "worker",
     (var.kube_cluster_tag) = "shared"
   })
 
   instance_type          = var.worker_type
   iam_instance_profile   = var.instance_profile_name
   ami                    = var.image_id
-  vpc_security_group_ids = concat([var.security_group_id], [aws_security_group.worker.id], flatten(var.additional_sg_ids))
+  vpc_security_group_ids = [var.security_group_id, aws_security_group.worker.id]
   subnet_id              = var.subnet_ids[count.index % local.subnet_count]
   ebs_optimized          = true
   user_data              = <<EOF
@@ -94,13 +94,12 @@ EOF
   }
 
   connection {
-    type     = "winrm"
-    user     = "Administrator"
-    password = var.windows_administrator_password
-    timeout  = "10m"
-    https    = "true"
+    type = "winrm"
+    user = "Administrator"
+    password = var.administrator_password
+    timeout = "10m"
+    https = "true"
     insecure = "true"
-    port     = 5986
-    host     = self.public_ip
+    port=5986
   }
 }

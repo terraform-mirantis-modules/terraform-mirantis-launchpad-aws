@@ -29,9 +29,3 @@ variable "master_type" {
 variable "master_volume_size" {
   default = 100
 }
-
-variable "additional_sg_ids" {
-  description = "Additional security group IDs to attach to the master nodes"
-  type        = list(string)
-  default     = []
-}

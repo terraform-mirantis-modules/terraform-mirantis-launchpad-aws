@@ -40,7 +40,6 @@ module "masters" {
   kube_cluster_tag      = module.common.kube_cluster_tag
   ssh_key               = local.cluster_name
   instance_profile_name = module.common.instance_profile_name
-  additional_sg_ids     = var.additional_master_sg_ids
 }
 
 module "msrs" {
@@ -57,7 +56,6 @@ module "msrs" {
   kube_cluster_tag      = module.common.kube_cluster_tag
   ssh_key               = local.cluster_name
   instance_profile_name = module.common.instance_profile_name
-  additional_sg_ids     = var.additional_msr_sg_ids
 }
 
 module "workers" {
@@ -73,7 +71,6 @@ module "workers" {
   kube_cluster_tag      = module.common.kube_cluster_tag
   ssh_key               = local.cluster_name
   instance_profile_name = module.common.instance_profile_name
-  additional_sg_ids     = var.additional_worker_sg_ids
 }
 
 module "windows_workers" {
@@ -89,7 +86,6 @@ module "windows_workers" {
   kube_cluster_tag               = module.common.kube_cluster_tag
   instance_profile_name          = module.common.instance_profile_name
   windows_administrator_password = var.windows_administrator_password
-  additional_sg_ids              = var.additional_windows_worker_sg_ids
 }
 
 locals {

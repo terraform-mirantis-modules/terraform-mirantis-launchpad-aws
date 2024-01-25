@@ -29,9 +29,3 @@ variable "worker_type" {
 variable "worker_volume_size" {
   default = 100
 }
-
-variable "additional_sg_ids" {
-  description = "Additional security group IDs to attach to the worker nodes"
-  type        = list(string)
-  default     = []
-}

@@ -16,6 +16,7 @@ locals {
   subnet_count = length(var.subnet_ids)
 }
 
+
 resource "aws_instance" "msr" {
   count = var.msr_count
 
@@ -29,7 +30,7 @@ resource "aws_instance" "msr" {
   iam_instance_profile   = var.instance_profile_name
   ami                    = var.image_id
   key_name               = var.ssh_key
-  vpc_security_group_ids = concat([var.security_group_id], [aws_security_group.msr.id], flatten(var.additional_sg_ids))
+  vpc_security_group_ids = [var.security_group_id, aws_security_group.msr.id]
   subnet_id              = var.subnet_ids[count.index % local.subnet_count]
   ebs_optimized          = true
   user_data              = <<EOF

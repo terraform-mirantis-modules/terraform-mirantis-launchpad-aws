@@ -157,27 +157,3 @@ variable "ssh_key_file_path" {
   default     = ""
   description = "If non-empty, use this path/filename as the ssh key file instead of generating automatically."
 }
-
-variable "additional_master_sg_ids" {
-  description = "Additional security group IDs to attach to the master nodes"
-  type        = list(string)
-  default     = []
-}
-
-variable "additional_worker_sg_ids" {
-  description = "Additional security group IDs to attach to the worker nodes"
-  type        = list(string)
-  default     = []
-}
-
-variable "additional_windows_worker_sg_ids" {
-  description = "Additional security group IDs to attach to the windows worker nodes"
-  type        = list(string)
-  default     = []
-}
-
-variable "additional_msr_sg_ids" {
-  description = "Additional security group IDs to attach to the MSR nodes"
-  type        = list(string)
-  default     = []
-}
