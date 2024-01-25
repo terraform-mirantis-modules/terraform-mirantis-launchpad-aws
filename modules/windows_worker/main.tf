@@ -19,8 +19,8 @@ resource "aws_instance" "mke_worker" {
   count = var.worker_count
 
   tags = tomap({
-    "Name" = "${var.cluster_name}-win-worker-${count.index + 1}",
-    "Role" = "worker",
+    "Name"                 = "${var.cluster_name}-win-worker-${count.index + 1}",
+    "Role"                 = "worker",
     (var.kube_cluster_tag) = "shared"
   })
 
@@ -94,12 +94,13 @@ EOF
   }
 
   connection {
-    type = "winrm"
-    user = "Administrator"
-    password = var.administrator_password
-    timeout = "10m"
-    https = "true"
+    type     = "winrm"
+    user     = "Administrator"
+    password = var.windows_administrator_password
+    timeout  = "10m"
+    https    = "true"
     insecure = "true"
-    port=5986
+    port     = 5986
+    host     = self.public_ip
   }
 }
