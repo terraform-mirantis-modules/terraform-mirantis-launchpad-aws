@@ -28,49 +28,52 @@ module "common" {
 }
 
 module "masters" {
-  source                = "./modules/master"
-  master_count          = var.master_count
-  vpc_id                = module.vpc.id
-  cluster_name          = local.cluster_name
-  subnet_ids            = module.vpc.public_subnet_ids
-  security_group_id     = module.common.security_group_id
-  master_type           = var.master_type
-  master_volume_size    = var.master_volume_size
-  image_id              = module.common.image_id
-  kube_cluster_tag      = module.common.kube_cluster_tag
-  ssh_key               = local.cluster_name
-  instance_profile_name = module.common.instance_profile_name
+  source                      = "./modules/master"
+  master_count                = var.master_count
+  vpc_id                      = module.vpc.id
+  cluster_name                = local.cluster_name
+  subnet_ids                  = module.vpc.public_subnet_ids
+  security_group_id           = module.common.security_group_id
+  master_type                 = var.master_type
+  master_volume_size          = var.master_volume_size
+  image_id                    = module.common.image_id
+  kube_cluster_tag            = module.common.kube_cluster_tag
+  ssh_key                     = local.cluster_name
+  instance_profile_name       = module.common.instance_profile_name
+  additional_ingress_sg_rules = var.additional_master_ingress_sg_rules
 }
 
 module "msrs" {
-  count                 = var.msr_count >= 1 ? 1 : 0
-  source                = "./modules/msr"
-  msr_count             = var.msr_count
-  vpc_id                = module.vpc.id
-  cluster_name          = local.cluster_name
-  subnet_ids            = module.vpc.public_subnet_ids
-  security_group_id     = module.common.security_group_id
-  image_id              = module.common.image_id
-  msr_type              = var.msr_type
-  msr_volume_size       = var.msr_volume_size
-  kube_cluster_tag      = module.common.kube_cluster_tag
-  ssh_key               = local.cluster_name
-  instance_profile_name = module.common.instance_profile_name
+  count                       = var.msr_count >= 1 ? 1 : 0
+  source                      = "./modules/msr"
+  msr_count                   = var.msr_count
+  vpc_id                      = module.vpc.id
+  cluster_name                = local.cluster_name
+  subnet_ids                  = module.vpc.public_subnet_ids
+  security_group_id           = module.common.security_group_id
+  image_id                    = module.common.image_id
+  msr_type                    = var.msr_type
+  msr_volume_size             = var.msr_volume_size
+  kube_cluster_tag            = module.common.kube_cluster_tag
+  ssh_key                     = local.cluster_name
+  instance_profile_name       = module.common.instance_profile_name
+  additional_ingress_sg_rules = var.additional_msr_ingress_sg_rules
 }
 
 module "workers" {
-  source                = "./modules/worker"
-  worker_count          = var.worker_count
-  vpc_id                = module.vpc.id
-  cluster_name          = local.cluster_name
-  subnet_ids            = module.vpc.public_subnet_ids
-  security_group_id     = module.common.security_group_id
-  image_id              = module.common.image_id
-  worker_type           = var.worker_type
-  worker_volume_size    = var.worker_volume_size
-  kube_cluster_tag      = module.common.kube_cluster_tag
-  ssh_key               = local.cluster_name
-  instance_profile_name = module.common.instance_profile_name
+  source                      = "./modules/worker"
+  worker_count                = var.worker_count
+  vpc_id                      = module.vpc.id
+  cluster_name                = local.cluster_name
+  subnet_ids                  = module.vpc.public_subnet_ids
+  security_group_id           = module.common.security_group_id
+  image_id                    = module.common.image_id
+  worker_type                 = var.worker_type
+  worker_volume_size          = var.worker_volume_size
+  kube_cluster_tag            = module.common.kube_cluster_tag
+  ssh_key                     = local.cluster_name
+  instance_profile_name       = module.common.instance_profile_name
+  additional_ingress_sg_rules = var.additional_worker_ingress_sg_rules
 }
 
 module "windows_workers" {
@@ -86,6 +89,7 @@ module "windows_workers" {
   kube_cluster_tag               = module.common.kube_cluster_tag
   instance_profile_name          = module.common.instance_profile_name
   windows_administrator_password = var.windows_administrator_password
+  additional_ingress_sg_rules    = var.additional_windows_worker_ingress_sg_rules
 }
 
 locals {
