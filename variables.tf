@@ -157,3 +157,63 @@ variable "ssh_key_file_path" {
   default     = ""
   description = "If non-empty, use this path/filename as the ssh key file instead of generating automatically."
 }
+
+variable "additional_master_ingress_sg_rules" {
+  description = "Additional security group rules to attach to the master nodes"
+  type = list(object({
+    from_port        = string
+    to_port          = string
+    protocol         = string
+    cidr_blocks      = optional(list(string))
+    ipv6_cidr_blocks = optional(list(string))
+    prefix_list_ids  = optional(list(string))
+    self             = optional(bool)
+    description      = optional(string)
+  }))
+  default = []
+}
+
+variable "additional_worker_ingress_sg_rules" {
+  description = "Additional security group rules to attach to the worker nodes"
+  type = list(object({
+    from_port        = string
+    to_port          = string
+    protocol         = string
+    cidr_blocks      = optional(list(string))
+    ipv6_cidr_blocks = optional(list(string))
+    prefix_list_ids  = optional(list(string))
+    self             = optional(bool)
+    description      = optional(string)
+  }))
+  default = []
+}
+
+variable "additional_windows_worker_ingress_sg_rules" {
+  description = "Additional security group rules to attach to the windows worker nodes"
+  type = list(object({
+    from_port        = string
+    to_port          = string
+    protocol         = string
+    cidr_blocks      = optional(list(string))
+    ipv6_cidr_blocks = optional(list(string))
+    prefix_list_ids  = optional(list(string))
+    self             = optional(bool)
+    description      = optional(string)
+  }))
+  default = []
+}
+
+variable "additional_msr_ingress_sg_rules" {
+  description = "Additional security group rules to attach to the MSR nodes"
+  type = list(object({
+    from_port        = string
+    to_port          = string
+    protocol         = string
+    cidr_blocks      = optional(list(string))
+    ipv6_cidr_blocks = optional(list(string))
+    prefix_list_ids  = optional(list(string))
+    self             = optional(bool)
+    description      = optional(string)
+  }))
+  default = []
+}

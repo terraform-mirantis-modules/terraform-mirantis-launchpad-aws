@@ -31,3 +31,18 @@ variable "msr_type" {
 variable "msr_volume_size" {
   default = 100
 }
+
+variable "additional_ingress_sg_rules" {
+  description = "Additional security group ingress rules to attach to the msr nodes"
+  type = list(object({
+    from_port        = string
+    to_port          = string
+    protocol         = string
+    cidr_blocks      = optional(list(string))
+    ipv6_cidr_blocks = optional(list(string))
+    prefix_list_ids  = optional(list(string))
+    self             = optional(bool)
+    description      = optional(string)
+  }))
+  default = []
+}
