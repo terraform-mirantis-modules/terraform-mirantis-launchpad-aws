@@ -43,7 +43,7 @@ module "masters" {
 }
 
 module "msrs" {
-  count                 = var.msr_count >= 1 ? 1 : 0
+  count                 = var.msr_count > 0 ? 1 : 0
   source                = "./modules/msr"
   msr_count             = var.msr_count
   vpc_id                = module.vpc.id
@@ -59,6 +59,7 @@ module "msrs" {
 }
 
 module "workers" {
+  count                 = var.worker_count > 0 ? 1 : 0
   source                = "./modules/worker"
   worker_count          = var.worker_count
   vpc_id                = module.vpc.id
@@ -74,6 +75,7 @@ module "workers" {
 }
 
 module "windows_workers" {
+  count                          = var.windows_worker_count > 0 ? 1 : 0
   source                         = "./modules/windows_worker"
   worker_count                   = var.windows_worker_count
   vpc_id                         = module.vpc.id
@@ -100,7 +102,7 @@ locals {
       privateInterface = "ens5"
     }
   ]
-  msrs = var.msr_count >= 1 ? [
+  msrs = var.msr_count > 0 ? [
     for host in module.msrs[0].machines : {
       ssh = {
         address = host.public_ip
@@ -111,8 +113,8 @@ locals {
       privateInterface = "ens5"
     }
   ] : []
-  workers = [
-    for host in module.workers.machines : {
+  workers = var.worker_count > 0 ? [
+    for host in module.workers[0].machines : {
       ssh = {
         address = host.public_ip
         user    = "ubuntu"
@@ -121,9 +123,9 @@ locals {
       role             = host.tags["Role"]
       privateInterface = "ens5"
     }
-  ]
-  windows_workers = [
-    for host in module.windows_workers.machines : {
+  ] : []
+  windows_workers = var.windows_worker_count > 0 ? [
+    for host in module.windows_workers[0].machines : {
       winrm = {
         address  = host.public_ip
         user     = "Administrator"
@@ -134,7 +136,7 @@ locals {
       role             = host.tags["Role"]
       privateInterface = "Ethernet 2"
     }
-  ]
+  ] : []
 
   hosts    = concat(local.managers, local.msrs, local.workers, local.windows_workers)
   key_path = var.ssh_key_file_path == "" ? "${path.root}/ssh_keys/${local.cluster_name}.pem" : var.ssh_key_file_path
