@@ -24,8 +24,7 @@ variable "vpc_cidr" {
 }
 
 variable "admin_password" {
-  default     = "mirantisadmin"
-  description = "The admini password for the apps"
+  description = "The admin password for the apps"
 }
 
 variable "admin_username" {
@@ -84,18 +83,18 @@ variable "msr_volume_size" {
 }
 
 variable "windows_administrator_password" {
-  default     = "w!ndozePassw0rd"
+  default     = ""
   description = "The password for the windows instances"
 }
 
 variable "mke_version" {
   default     = "3.6.3"
-  description = "The password for the windows instances"
+  description = "The value of the MKE version to be installed"
 }
 
 variable "msr_version" {
   default     = "2.9.11"
-  description = "The password for the MSR instances"
+  description = "The value of the MSR version to be installed"
 }
 
 variable "msr_install_flags" {
