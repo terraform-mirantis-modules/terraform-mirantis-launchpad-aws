@@ -1,11 +1,21 @@
 # Terraform for Launchpad on AWS
 
-A published terraform module for preparing a basic AWS EC2 cluster for Launchpad installation.
+A terraform module for preparing a basic AWS EC2 cluster for Launchpad installation.
 
-[Launchpad]{https://docs.mirantis.com/mke/3.7/launchpad.html} is a Mirantis tool for installation 
+[Launchpad]{https://docs.mirantis.com/mke/3.7/launchpad.html} is the Mirantis tool for installation 
 of Mirantis Containers products. The tool can work with any properly prepared accessible cluster,
 This module can create a basic simple cluster, and provide the appropriate Launchpad configuration
 for use with Launchpad.
+
+## Prerequisites
+
+* An AWS account with access to creates VPC/EC2 resources
+* Terraform installed
+
+### Authentication
+
+The AWS terraform provider is used. It requires standard authentication either via environment
+variables or using the aws cli.
 
 ## Usage
 
@@ -32,22 +42,20 @@ terraform output -raw mke_cluster > launchpad.yaml
 launchpad apply
 ```
 
-A full list of inputs and outputs is listed at https://registry.terraform.io/modules/terraform-mirantis-modules/launchpad-aws/mirantis/latest
-
 ### Cluster Components
 
 Cluster composition can be managed using simple input controls for swarm managers, workers, 
 MSR replicas. Windows workers also have their own controls matching controls.
 
 ```
-manager_count = 3             // 3 machines will be created
-manager_type  = "t3.2xlarge"  // machine node type
-manager_volume_size = 100GB   // machine volume size
+manager_count       = 3            // 3 machines will be created
+manager_type        = "t3.2xlarge" // machine node type
+manager_volume_size = 100GB        // machine volume size
 ```
 
 ### Product configuration
 
-While the Terraform module does not run launchpad, it does prepare the Launchpad congfiguration
+While the Terraform module does not run launchpad, it does prepare the Launchpad configuration
 file for you. Because of this you can provide inputs that will then get included into the 
 Launchpad yaml.
 
